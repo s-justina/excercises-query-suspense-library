@@ -1,8 +1,20 @@
 import React, {useState} from "react";
+import { useQuery } from 'react-query'
+
 import fetchPokemon from "./fetchPokemon";
 
 const Pokemon = ({id})=>{
-return null;
+    const {data: pokemon, error} = useQuery(['pokemon', {id}], fetchPokemon);
+    // console.log(data);
+return !pokemon?(
+    <div>{error}</div>
+) : (
+    <div>
+    <h2>#{id}</h2>
+    <h2>{pokemon.name}</h2>
+        <img src={pokemon.sprites.front_shiny} alt="pokemon"/>
+    </div>
+)
 };
 
 export const PokemonPager=()=>{
@@ -10,9 +22,9 @@ export const PokemonPager=()=>{
 
   return(
       <div>
-          <button type="button" onClick={()=>setId(id!==1? id-1 : 0)}>
+          <button type="button" onClick={()=>setId(id!==1? id-1 : 250)}>
               Previous</button>
-          <button type="button" onClick={()=>setId(id!==250? 0 : id+1)}>
+          <button type="button" onClick={()=>setId(id!==250? id+1 : 1)}>
               Next</button>
           <Pokemon id={id}/>
       </div>
